@@ -33,6 +33,8 @@ let tracking = {
   active: false,
   startedAt: null,
 };
+let lastActivityAt = 0;
+const ACTIVITY_TIMEOUT_MS = 75 * 1000;
 
 function todayKey() {
   const d = new Date();
@@ -101,6 +103,7 @@ function startTracking() {
   if (tracking.active) return;
   tracking.active = true;
   tracking.startedAt = Date.now();
+  lastActivityAt = Date.now();
 }
 
 async function stopTracking() {
@@ -176,6 +179,10 @@ chrome.idle.onStateChanged.addListener((state) => {
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "flush") {
+    if (tracking.active && Date.now() - lastActivityAt > ACTIVITY_TIMEOUT_MS) {
+      void stopTracking();
+      return;
+    }
     void flushElapsed();
   }
 });
@@ -191,6 +198,16 @@ chrome.storage.onChanged.addListener((changes, area) => {
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === "flushNow") {
     void flushElapsed().then(() => sendResponse({ ok: true }));
+    return true;
+  }
+  if (msg?.type === "userActivity") {
+    lastActivityAt = Date.now();
+    const tabId = _sender?.tab?.id;
+    if (!tabId) {
+      sendResponse({ ok: false });
+      return false;
+    }
+    void evaluateTab(tabId).then(() => sendResponse({ ok: true }));
     return true;
   }
 });
