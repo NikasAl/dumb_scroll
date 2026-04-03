@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dumb Scroll</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1 class="title">Лента</h1>
+      <p class="subtitle">Время на соцсетях сегодня</p>
+    </header>
+
+    <section class="hero">
+      <div class="time" id="todayDisplay">—</div>
+      <div class="compare" id="compareLine"></div>
+    </section>
+
+    <div class="progress-wrap">
+      <div class="progress-label" id="progressLabel"></div>
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <p class="motivation" id="motivation"></p>
+
+    <section class="week">
+      <h2 class="section-title">7 дней</h2>
+      <div class="week-chart" id="weekChart"></div>
+    </section>
+
+    <footer class="footer">
+      <a href="options.html" class="link" id="optionsLink">Сайты и настройки</a>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
