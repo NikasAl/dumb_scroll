@@ -89,6 +89,12 @@ textarea:focus {
   font-size: 14px;
 }
 
+.check + .check {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--surface);
+}
+
 .check input {
   margin-top: 3px;
 }

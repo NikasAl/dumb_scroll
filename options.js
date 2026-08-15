@@ -6,6 +6,7 @@ const STORAGE_KEYS = {
 const DEFAULT_SETTINGS = {
   domains: [],
   requireWindowFocus: true,
+  motivatorMode: false,
 };
 
 async function load() {
@@ -29,6 +30,7 @@ async function load() {
 
   document.getElementById("domains").value = domains.join("\n");
   document.getElementById("requireFocus").checked = merged.requireWindowFocus !== false;
+  document.getElementById("motivatorMode").checked = !!merged.motivatorMode;
 }
 
 function parseDomains(text) {
@@ -45,8 +47,9 @@ document.getElementById("save").addEventListener("click", async () => {
     return;
   }
   const requireWindowFocus = document.getElementById("requireFocus").checked;
+  const motivatorMode = document.getElementById("motivatorMode").checked;
   await chrome.storage.local.set({
-    [STORAGE_KEYS.SETTINGS]: { domains, requireWindowFocus },
+    [STORAGE_KEYS.SETTINGS]: { domains, requireWindowFocus, motivatorMode },
   });
   const el = document.getElementById("saved");
   el.hidden = false;

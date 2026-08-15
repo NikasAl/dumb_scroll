@@ -26,6 +26,8 @@ const DEFAULT_SETTINGS = {
   ],
   /** Не считать, если окно браузера не в фокусе */
   requireWindowFocus: true,
+  /** Заменять контент сайтов из списка мотивационной заглушкой */
+  motivatorMode: false,
 };
 
 let settings = { ...DEFAULT_SETTINGS };
@@ -209,6 +211,12 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     }
     void evaluateTab(tabId).then(() => sendResponse({ ok: true }));
     return true;
+  }
+  if (msg?.type === "shouldBlock") {
+    const url = msg?.url;
+    const blocked = settings.motivatorMode && urlMatchesSocial(url);
+    sendResponse({ block: blocked });
+    return false;
   }
 });
 
